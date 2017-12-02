@@ -23,7 +23,8 @@ describe('AppEffects', () => {
   describe('someEffect', () => {
     it('should work', async () => {
       actions = hot('-a-|', { a: { type: 'LOAD_DATA' } });
-      expect(await readAll(effects.loadData)).toEqual([{ type: 'DATA_LOADED', payload: {} }]);
+      const allData = await readAll(effects.loadData);
+      expect(allData).toEqual([{ type: 'DATA_LOADED', payload: {} }]);
     });
   });
 });
