@@ -7,6 +7,14 @@ import { readAll, hot } from '@nrwl/nx/testing';
 import { AppEffects } from './app.effects';
 import { of } from 'rxjs/observable/of';
 
+export const return1 = () => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(1);
+    }, 5000);
+  });
+};
+
 describe('AppEffects', () => {
   let actions;
   let effects: AppEffects;
@@ -21,10 +29,15 @@ describe('AppEffects', () => {
   });
 
   describe('someEffect', () => {
+    it("should support async execution of test preparation and expectations", async () => {
+      expect(await return1()).toEqual(1);
+    }, 10000);
+
     it('should work', async () => {
       actions = hot('-a-|', { a: { type: 'LOAD_DATA' } });
-      const allData = await readAll(effects.loadData);
-      expect(allData).toEqual([{ type: 'DATA_LOADED', payload: {} }]);
-    });
+      expect(await readAll(effects.loadData)).toEqual([{ type: 'DATA_LOADED', payload: {} }]);
+    }, 50000);
+
   });
+
 });
